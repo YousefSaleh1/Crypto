@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\BlogController;
+use App\Http\Controllers\API\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +24,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/blogs', [BlogController::class, 'index']);
+    Route::get('/blog/{blog}', [BlogController::class, 'show']);
+    Route::post('/create_blog', [BlogController::class, 'store']);
+    Route::post('/update_blog/{blog}', [BlogController::class, 'update']);
+    Route::delete('/delete_blog', [BlogController::class, 'destroy']);
+
+    Route::get('/tags', [TagController::class, 'index']);
+    Route::get('/tag/{tag}', [TagController::class, 'show']);
+    Route::post('/create_tag', [TagController::class, 'store']);
+
+});
