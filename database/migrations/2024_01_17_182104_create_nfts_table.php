@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('nfts', function (Blueprint $table) {
             $table->id();
-            $table->int('user-id');
+            $table->integer('user-id');
             $table->string('file');
-            $table->int('price');
+            $table->integer('price');
             $table->string('title');
             $table->string('description');
             $table->string('likes');
-            $table->int('category-id');
-            $table->int('currency-id');
+            $table->integer('category-id');
+            $table->integer('currency-id');
             $table->timestamps();
         });
     }
