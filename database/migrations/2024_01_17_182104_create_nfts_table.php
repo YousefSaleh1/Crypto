@@ -18,9 +18,8 @@ return new class extends Migration
             $table->integer('price');
             $table->string('title');
             $table->string('description');
-            $table->string('likes');
             $table->integer('category-id');
-            $table->integer('currency-id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
