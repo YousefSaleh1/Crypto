@@ -17,4 +17,13 @@ trait ApiResponseTrait
 
         return response()->json($array,$status);
     }
+
+    public function customeRespone($data, $message, $status) {
+        $array = [
+            'data'=>$data,
+            'message'=>$message
+        ];
+
+        return response()->json($array, $status);
+    }
 }
