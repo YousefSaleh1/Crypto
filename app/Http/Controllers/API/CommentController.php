@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Blog;
+use App\Models\User;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -93,6 +94,15 @@ class CommentController extends Controller
         }
 
         return $this->customeRespone(null, "not found", 404);
+    }
+
+    public function toggleLike(User $user, Comment $comment)
+    {
+        return $comment->toggleLike($user,"like");
+    }
+    public function toggleDisLike(User $user, Comment $comment)
+    {
+        return $comment->toggleLike($user,"dislike");
     }
 
 }

@@ -22,6 +22,8 @@ class BlogResource extends JsonResource
             'updated_at'    => $this->created_at->format('Y-m-d'),
             'photo'         => asset('photos/' . $this->photo),
             'tags'          => TagResource::collection($this->whenLoaded('tags')),
+            'likes_count'   => $this->likesCount(),
+
         ];
     }
 }
