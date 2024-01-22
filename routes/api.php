@@ -51,4 +51,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tag/{tag}', [TagController::class, 'show']);
     Route::post('/create_tag', [TagController::class, 'store']);
 
+
+    Route::prefix('user/{user}')->group(function () {
+        Route::post('/blog/{blog}/toggle-like', [BlogController::class, 'toggleLike']);
+        Route::post('/comment/{comment}/toggle-like', [CommentController::class, 'toggleLike']);
+        Route::post('/comment/{comment}/toggle-dislike', [CommentController::class, 'toggleDisLike']);
+    });
+
+
 });

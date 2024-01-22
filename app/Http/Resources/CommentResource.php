@@ -24,7 +24,10 @@ class CommentResource extends JsonResource
             'blog_id'       =>$blog_id,
             'body'          => $this->body,
             'created_at'    => $this->created_at->format('Y-m-d H:i:s'),
-            'replies'       => ReplyResource::collection($this->replies)
+            'replies'       => ReplyResource::collection($this->replies),
+            'likes_count'   => $this->likesCount('like'),
+            'dislikes_count'   => $this->likesCount('dislike'),
+
         ];
     }
 }
