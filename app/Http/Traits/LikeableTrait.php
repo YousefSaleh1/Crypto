@@ -60,8 +60,12 @@ trait LikeableTrait
         ])->delete();
     }
 
-    public function likesCount($reaction): int
+    public function likesCount(string $reaction = null): int
     {
-        return $this->likes()->where('reaction',$reaction)->count();
+        if ($reaction) {
+            return $this->likes->where('reaction', $reaction)->count();
+        }
+
+        return $this->likes->count();
     }
 }

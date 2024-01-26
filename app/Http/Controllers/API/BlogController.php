@@ -104,6 +104,8 @@ class BlogController extends Controller
 
     public function toggleLike(User $user, Blog $blog)
     {
-        return $blog->toggleLike($user);
+        return $blog->toggleLike($user,"like");
     }
+
+
 }
