@@ -80,6 +80,7 @@ class BlogController extends Controller
         ]);
 
         if ($request->has('tags')) {
+            $blog->tags()->detach();
             $blog->tags()->attach($request->input('tags'));
         }
 
