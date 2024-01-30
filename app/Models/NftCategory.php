@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class NftCategory extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     protected $fillable = [
         'id',
         'name'
     ];
 
-    public function NftCategory()
+    public function Nft()
     {
-        return $this->hasMany(Nft::class);
+        return $this->belongsTo(Nft::class);
 }
 
 }

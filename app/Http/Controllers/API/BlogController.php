@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Models\Blog;
+use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Requests\BlogRequest;
+use App\Http\Traits\LikeableTrait;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\BlogResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadPhotoTrait;
-use App\Models\Blog;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
-    use ApiResponseTrait, UploadPhotoTrait;
+    use ApiResponseTrait, UploadPhotoTrait,LikeableTrait;
     /**
      * Display a listing of the resource.
      */
@@ -56,6 +58,7 @@ class BlogController extends Controller
     {
         if($blog){
             $blog->load('tags');
+            $blog->load('likes');
             return $this->customeRespone(new BlogResource($blog), "Done!", 200);
         }
         return $this->customeRespone(null, "not found", 404);
@@ -83,7 +86,6 @@ class BlogController extends Controller
             $blog->tags()->detach();
             $blog->tags()->attach($request->input('tags'));
         }
-
         return $this->customeRespone(new BlogResource($blog), "Blog Updated Successfuly", 200);
     }
 
@@ -100,4 +102,11 @@ class BlogController extends Controller
 
         return $this->customeRespone(null, "not found", 404);
     }
+
+    public function toggleLike(User $user, Blog $blog)
+    {
+        return $blog->toggleLike($user,"like");
+    }
+
+
 }

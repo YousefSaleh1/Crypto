@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nfts', function (Blueprint $table) {
+        Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->integer('user-id');
-            $table->string('file');
-            $table->integer('price');
-            $table->string('title');
-            $table->string('description');
-            $table->integer('category-id');
-            $table->softDeletes();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->morphs('likable');
+            $table->enum('reaction', ['like', 'dislike']);
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nfts');
+        Schema::dropIfExists('likes');
     }
 };

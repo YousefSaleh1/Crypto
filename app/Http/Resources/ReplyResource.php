@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BlogResource extends JsonResource
+class ReplyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,15 +15,13 @@ class BlogResource extends JsonResource
     public function toArray(Request $request): array
     {
         $user_id = $this->user_id;
+        $comment_id = $this->comment_id;
         return [
-            'id'            => $this->id,
-            'title'         => $this->title,
+            'id'            =>$this->id,
+            'user_id'       =>$user_id,
             'body'          => $this->body,
-            'updated_at'    => $this->created_at->format('Y-m-d'),
-            'photo'         => asset('photos/' . $this->photo),
-            'tags'          => TagResource::collection($this->whenLoaded('tags')),
-            'likes_count'   => $this->likesCount(),
-
+            'created_at'    => $this->created_at->format('Y-m-d H:i:s'),
+            'comment_id'    =>$comment_id,
         ];
     }
 }
