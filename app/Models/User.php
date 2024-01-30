@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Provider;
+use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Verification;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -22,6 +27,7 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
+        'verification_code',
     ];
 
     /**
@@ -45,6 +51,10 @@ class User extends Authenticatable
     ];
 
 
+
+
+    /* The relationships with other Tables */
+
     public function user_info()
     {
         return $this->hasOne( UserInfo::class);
@@ -53,6 +63,17 @@ class User extends Authenticatable
     public function user_verification()
     {
         return $this->hasOne( Verification::class);
+    }
+
+    public function providers()
+    {
+        return $this->hasMany(Provider::class, 'user_id', 'id');
+    }
+
+
+    public function sendPasswordResetNotification($token){
+        $url = 'http://127.0.0.1:8000/reset-password?token=' . $token;
+        $this->notify(new ResetPasswordNotification($url));
     }
 
     public function blogs()

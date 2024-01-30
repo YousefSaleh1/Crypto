@@ -45,4 +45,20 @@ class AuthController extends Controller
         return $this->apiResponse(new UserResource($user),$token,'successfully login,welcome!',200);
 
     }
+
+    public function logout(Request $request)
+    {
+        if ($request->user()) {
+
+        $request->user()->delete();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+
+    } else {
+        return response()->json([
+            'error' => 'No active session found'
+        ], 422);
+    }
+}
 }

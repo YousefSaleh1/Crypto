@@ -17,6 +17,7 @@ class Verification extends Model
         'id_number',
         'full_name_card',
         'display_name',
+        'user_name',
         'fontside_cardphoto',
         'backside_cardphoto',
         'selfie_photo',

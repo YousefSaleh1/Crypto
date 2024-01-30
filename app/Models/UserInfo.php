@@ -14,11 +14,14 @@ class UserInfo extends Model
 
     protected $fillable = [
         'user_id',
-        'first_name ',
-        'last_name ',
-        'user_name ',
-        'display_name ',
-        'phone_number ',
+        'first_name',
+        'last_name',
+        'user_name',
+        'display_name',
+        'phone_number',
+        
+
+
     ];
 
     public function user()
