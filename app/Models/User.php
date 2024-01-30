@@ -76,14 +76,13 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new ResetPasswordNotification($url));
     }
 
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class, 'user_id', 'id');
+    }
 
-
-
-
-
-
-
-
-
-
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }
