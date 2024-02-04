@@ -14,3 +14,7 @@ trait UploadPhotoTrait
         return $path;
     }
 }
+
+
+
+

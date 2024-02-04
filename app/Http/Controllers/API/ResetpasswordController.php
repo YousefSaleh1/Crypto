@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Validator;
-use Illuminate\Validation\Rules\Password as RulesPassword;
+use App\Http\Requests\EmailRequest;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ResetpasswordController extends Controller
 {
@@ -18,10 +18,7 @@ class ResetpasswordController extends Controller
         $this->middleware('guest');
     }
 
-    public function sendemail(Request  $request){
-        $validated = $request->validate([
-            'email' =>'required|email'
-        ]);
+    public function sendemail(EmailRequest  $request){
 
         $status = password::sendResetLink(
             $request->only('email')
@@ -38,39 +35,18 @@ class ResetpasswordController extends Controller
 
     }
 
-    public function reset(Request $request){
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => ['required', 'confirmed', RulesPassword::defaults()],
-        ]);
+    public function reset(ResetPasswordRequest $request){
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+        $user = User::where('email', $request->email)->first();
 
-                $user->tokens()->delete();
-
-                event(new PasswordReset($user));
-            }
-        );
-
-        if ($status == Password::PASSWORD_RESET) {
-            return response([
-                'message'=> 'Password reset successfully'
-            ]);
-            return $this->repetitiveResponse('','Password reset successfully', 200);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
         }
+        // Update the user's password
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-        return response([
-            'message'=> __($status)
-        ], 500);
-        
-
+        return response()->json(['message' => 'Password reset successfully'], 200);
     }
 }
 

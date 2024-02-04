@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('verifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->integer('id_number');
+            $table->string('id_number')->unique();
             $table->string('full_name_card');
             $table->string('display_name');
             $table->string('user_name');

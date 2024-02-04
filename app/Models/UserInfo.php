@@ -19,9 +19,6 @@ class UserInfo extends Model
         'user_name',
         'display_name',
         'phone_number',
-        
-
-
     ];
 
     public function user()

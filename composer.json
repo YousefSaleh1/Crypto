@@ -12,7 +12,8 @@
         "laravel/socialite": "^5.11",
         "laravel/tinker": "^2.8",
         "symfony/http-client": "^6.4",
-        "symfony/mailgun-mailer": "^6.4"
+        "symfony/mailgun-mailer": "^6.4",
+        "webpatser/laravel-countries": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

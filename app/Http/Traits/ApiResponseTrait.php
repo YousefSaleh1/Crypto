@@ -26,4 +26,5 @@ trait ApiResponseTrait
 
         return response()->json($array, $status);
     }
+    
 }

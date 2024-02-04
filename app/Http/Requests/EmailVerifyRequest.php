@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreVerification extends FormRequest
+class EmailVerifyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,14 +23,11 @@ class StoreVerification extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            'id_number'            => 'string|unique:verifications',
-            'full_name_card'       => 'required|string|max:50',
-            'display_name'         => 'required|string|max:50',
-            'user_name'            =>'required|string|max:50',
-            'fontside_cardphoto'   => 'required',
-            'backside_cardphoto'   =>'required',
-            'selfie_photo'         =>'required',
+            'email'               => ['required' , 'email' , Rule::exists(User::class , 'email')],
+            'verification_code'   => ['required' , 'string']
         ];
+
     }
 }
