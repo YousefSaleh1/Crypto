@@ -37,21 +37,36 @@ trait LikeableTrait
         return response()->json(['message' => $message]);
     }
 
-    public function isLikedByUser(User $user,string $reaction): bool
+    public function isLikedByUser($user,string $reaction): bool
     {
-        return $this->likes()->where('user_id', $user->id)->where('reaction',$reaction)->exists();
+        return $this->likes()->where('user_id', $user->id)
+                    ->where('reaction',$reaction)
+                    ->where('likable_id',$this->id)
+                    ->where('likable_type',get_class($this))
+                    ->exists();
     }
 
-    private function add(User $user,string $reaction)
+    private function add($user,string $reaction)
     {
-        $user->likes()->create([
-            'likable_id' => $this->id,
+
+        $existingLike = $this->likes()->where([
+            'user_id'      => $user->id,
+            'likable_id'   => $this->id,
             'likable_type' => get_class($this),
-            'reaction' => $reaction,
-        ]);
+            'reaction'     => $reaction
+        ])->first();
+        // If the user hasn't liked the blog, create a new like
+        if (!$existingLike) {
+            $user->likes()->create([
+                'likable_id' => $this->id,
+                'likable_type' => get_class($this),
+                'reaction' => $reaction,
+            ]);
+        }
+
     }
 
-    private function remove(User $user)
+    private function remove($user)
     {
         $this->likes()->where([
             'user_id' => $user->id,
