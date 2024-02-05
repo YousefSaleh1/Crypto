@@ -98,10 +98,12 @@ class CommentController extends Controller
 
     public function toggleLike(User $user, Comment $comment)
     {
+        $user = Auth::user();
         return $comment->toggleLike($user,"like");
     }
     public function toggleDisLike(User $user, Comment $comment)
     {
+        $user = Auth::user();
         return $comment->toggleLike($user,"dislike");
     }
 
