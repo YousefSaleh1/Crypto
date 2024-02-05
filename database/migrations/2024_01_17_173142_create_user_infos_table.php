@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('display_name');
             $table->integer('phone_number');
+
             $table->softDeletes();
             $table->timestamps();
         });

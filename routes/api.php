@@ -17,12 +17,6 @@ use App\Http\Controllers\API\CommentController;
 
 
 
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,21 +27,21 @@ use App\Http\Controllers\API\CommentController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum' , 'verified')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::post('/register',[AuthController::class,'register']);
+Route::post('email-verification', [AuthController::class, 'verify'])->name('user.verify');
+
 Route::post('/login', [AuthController::class, 'login']);
+
 
 Route::get('login/{provider}', [SocialiteController::class, 'redirectToProvider']);
 Route::get('login/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
 
 Route::post('forgetpassword', [ResetpasswordController::class, 'sendemail']);
 Route::post('reset-password', [ResetpasswordController::class, 'reset']);
-
-
-
 
 
 

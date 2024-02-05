@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class UserinfoController extends Controller
 {
     use ApiResponseTrait;
@@ -40,6 +41,7 @@ class UserinfoController extends Controller
         $validatedData = $request->validated();
 
         $user_id = Auth::user()->id;
+
         $user_info = UserInfo::create([
             'user_id'      => $user_id,
             'first_name'   => $request->first_name,
@@ -94,13 +96,11 @@ class UserinfoController extends Controller
 
 
         $user_info->update([
-
             'first_name'   => $request->first_name,
             'last_name'    => $request->last_name ,
             'user_name'    => $request->user_name,
             'display_name' => $request->display_name ,
             'phone_number' => $request->phone_number ,
-
         ]);
 
         return $this->repetitiveResponse(new UserinfoResource($user_info),'Successfully Updated', 200);

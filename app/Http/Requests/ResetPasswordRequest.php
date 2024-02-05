@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password as RulesPassword;
 
-class StoreVerification extends FormRequest
+
+class ResetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +24,9 @@ class StoreVerification extends FormRequest
     public function rules(): array
     {
         return [
-            'id_number'            => 'string|unique:verifications',
-            'full_name_card'       => 'required|string|max:50',
-            'display_name'         => 'required|string|max:50',
-            'user_name'            =>'required|string|max:50',
-            'fontside_cardphoto'   => 'required',
-            'backside_cardphoto'   =>'required',
-            'selfie_photo'         =>'required',
+            'email'               => ['required', 'email'],
+            'verification_code'   => ['required'],
+            'password'            => ['required', 'confirmed', RulesPassword::defaults()]
         ];
     }
 }

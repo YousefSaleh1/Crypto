@@ -29,6 +29,7 @@ class StoreUserinfo extends FormRequest
             'user_name'            => 'required|string|max:50',
             'display_name'         => 'required|string|max:50',
             'phone_number'         =>'required',
+            'location'             =>'string',
 
         ];
     }

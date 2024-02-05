@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreVerification;
 use App\Http\Resources\VerificationResource;
 use App\Http\Traits\ApiResponseTrait;
@@ -11,10 +10,11 @@ use App\Http\Traits\UploadPhotoTrait;
 use App\Models\Verification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class VerificationController extends Controller
 {
-    use ApiResponseTrait , UploadPhotoTrait;
+    use ApiResponseTrait, UploadPhotoTrait ;
     /**
      * Display a listing of the resource.
      */
@@ -59,10 +59,12 @@ class VerificationController extends Controller
             $path_selfie_photo = null;
         }
 
+        $id_number = str_pad(mt_rand(1, 999999999), 10, '0', STR_PAD_LEFT);
+
 
         $user_verification = Verification::create([
             'user_id'              =>$user_id,
-            'id_number'            =>$request->id_number,
+            'id_number'            =>$id_number,
             'full_name_card'       =>$request->full_name_card,
             'display_name'         =>$request->display_name,
             'user_name'            =>$request->user_name,
@@ -130,18 +132,19 @@ class VerificationController extends Controller
             $path_selfie_photo =$user_verification->selfie_photo;
         }
 
+
         $user_verification->update([
-            'id_number'            => $request->id_number,
-            'full_name_card'       => $request->full_name_card,
-            'display_name'         => $request->display_name,
+            'full_name_card'       =>$request->full_name_card,
+            'display_name'         =>$request->display_name,
             'fontside_cardphoto'   =>$path_fontside_cardphoto,
-            'backside_cardphoto'   =>  $path_backside_cardphoto,
-            'selfie_photo'         =>  $path_selfie_photo,
+            'backside_cardphoto'   =>$path_backside_cardphoto,
+            'selfie_photo'         =>$path_selfie_photo,
         ]);
 
         return $this->repetitiveResponse(new VerificationResource ($user_verification),'Successfully Updated', 200);
 
     }
+
 
     /**
      * Remove the specified resource from storage.

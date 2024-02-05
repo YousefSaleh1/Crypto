@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailVerifyRequest;
 use App\Http\Requests\StoreUser;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\ApiResponseTrait;
@@ -10,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+
 
 class AuthController extends Controller
 {
@@ -19,14 +22,45 @@ class AuthController extends Controller
 
         $user = $request->validated();
 
+        $AccountID = str_pad(mt_rand(1, 999999999),8 , '0', STR_PAD_LEFT);
+
         $user = User::create([
-            'email' => $user['email'],
+            'email'    => $user['email'],
             'password' => Hash::make($user['password']),
+            'uid'      => $AccountID,
         ]);
 
-        $token = $user->createToken('authToken')->plainTextToken;
+        // Generate a random verification code
+        $code= mt_rand(1000, 9999);
 
-        return $this->apiResponse(new UserResource($user),$token,'registered successfully',200);
+        // Store the verification code in the user's record
+        $data['code'] = $code;
+        $data['email'] = $user->email;
+        $data['title'] = 'Email Verification';
+
+        Mail::send('emails.verify', ['data' =>$data], function($message) use ($data){
+            $message->to($data['email'])->subject($data['title']);
+        });
+
+        //save the verification code
+        $user->verification_code = $data['code'];
+        $user->save();
+
+        return response()->json(['message' => 'verification-link-sent']);
+    }
+
+    public function verify(EmailVerifyRequest $request){
+        $user= User::where ('email', $request->email )->first();
+        if($user){
+            $user->email_verified_at = now();
+            $token = $user->createToken('authToken')->plainTextToken;
+            $user->save();
+        }
+        else{
+            return $this->repetitiveResponse(null , 'not found' , 404);
+
+        }
+        return $this->apiResponse(new UserResource($user),$token,' verfied Email and registered successfully',200);
 
     }
 
@@ -62,3 +96,5 @@ class AuthController extends Controller
     }
 }
 }
+
+
